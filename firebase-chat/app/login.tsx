@@ -6,20 +6,21 @@ import { router } from "expo-router";
 import { useState } from "react";
 
 export default function LoginScreen() {
-  const { top } = useSafeAreaInsets();
-  const [email, setEmail] = useState<string>("");
+  const { top } = useSafeAreaInsets();  // Get the top safe area inset for adjusting the layout on devices with notches or other screen features
+  const [email, setEmail] = useState<string>("");  // Define state variables to store email and password inputs
   const [password, setPassword] = useState<string>("");
   const auth = getAuth();
 
+  // Function to handle user login
   const loginUser = async () => {
     if (!email && !password)
       return alert("Please enter an email and password.");
     if (!email) return alert("Please enter an email.");
     if (!password) return alert("Please enter a password.");
 
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)  // Attempt to sign in with email and password using Firebase authentication
       .then((userCredential) => {
-        router.replace("/(app)/(tabs)/");
+        router.replace("/(app)/(tabs)/");  // On success, navigate to the app's main page
       })
       .catch((error) => {
         const errorMessage = error.message;

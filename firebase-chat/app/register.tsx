@@ -7,21 +7,21 @@ import { useState } from "react";
 
 export default function RegisterScreen() {
   const { top } = useSafeAreaInsets();
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>("");  // Declare state variables for storing user input (email and password)
   const [password, setPassword] = useState<string>("");
-  const auth = getAuth();
+  const auth = getAuth();  // Initialize Firebase authentication
 
   const registerUser = async () => {
-    if (!email && !password)
+    if (!email && !password)  // Validate email and password fields before proceeding
       return alert("Please enter an email and password.");
     if (!email) return alert("Please enter an email.");
     if (!password) return alert("Please enter a password.");
 
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password) // Attempt to create a new user with email and password via Firebase authentication
       .then((userCredential) => {
         router.replace("/(app)/(tabs)/");
       })
-      .catch((error) => {
+      .catch((error) => {  // On failure, display the error message
         const errorMessage = error.message;
         alert(errorMessage);
       });

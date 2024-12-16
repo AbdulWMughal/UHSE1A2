@@ -16,6 +16,7 @@ import { PaperProvider } from "react-native-paper";
 
 import { theme } from "@/theme";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBC-rSsGGk9fdIgTa6sA_bA01hTI-U0o58",
   authDomain: "fir-chat-f6b0e.firebaseapp.com",
@@ -25,6 +26,7 @@ const firebaseConfig = {
   appId: "1:169535778492:web:84e7f3f0d20547386c6ab9"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),

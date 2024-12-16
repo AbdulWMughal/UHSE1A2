@@ -23,23 +23,23 @@ import {
 } from "firebase/firestore";
 import { FontAwesome } from "@expo/vector-icons";
 
-export default function ChatMessageScreen() {
+export default function ChatMessageScreen() { // State hooks to manage messages and conversation ID
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [conversationId, setConversationId] = useState<string>("");
   const { bottom, top } = useSafeAreaInsets();
-  const { id, email } = useLocalSearchParams();
+  const { id, email } = useLocalSearchParams();  // Extract user ID and email from route parameters
   const { currentUser } = getAuth();
   const db = getFirestore();
 
-  useEffect(() => {
+  useEffect(() => { // useEffect to listen for changes to the conversation in Firestore
     const q = query(
-      collection(db, "conversations"),
+      collection(db, "conversations"),  // Check for conversations between the current user and the selected user (id)
       or(
         and(where("u1._id", "==", currentUser?.uid), where("u2._id", "==", id)),
         and(where("u2._id", "==", currentUser?.uid), where("u1._id", "==", id))
       )
     );
-    const unsubscribe = onSnapshot(q, (snap) => {
+    const unsubscribe = onSnapshot(q, (snap) => { // Subscribe to changes in the conversation data in Firestore
       if (snap?.docs && snap?.docs.length > 0) {
         if (!conversationId) setConversationId(snap.docs[0].data()._id);
         setMessages([...snap.docs[0].data().messages]);
@@ -49,14 +49,14 @@ export default function ChatMessageScreen() {
     return () => unsubscribe();
   }, []);
 
-  const onSend = async (messages: IMessage[]) => {
-    const previousMessages = [...messages];
+  const onSend = async (messages: IMessage[]) => { // Function to handle sending messages
+    const previousMessages = [...messages]; // Save previous messages before sending
 
     try {
       const conversationRef = conversationId
         ? doc(db, "conversations", conversationId)
-        : doc(collection(db, "conversations"));
-      let message = messages[0];
+        : doc(collection(db, "conversations")); // Create new conversation if no ID exists
+      let message = messages[0];  // Get the first message from the messages array
       message.user = {
         _id: currentUser?.uid as string,
         name: currentUser?.email as string,
@@ -68,7 +68,7 @@ export default function ChatMessageScreen() {
       message.createdAt = createdAt;
 
       setMessages((previousMessages: IMessage[]) =>
-        GiftedChat.append(previousMessages, [message], false)
+        GiftedChat.append(previousMessages, [message], false) // Update chat UI with the new message
       );
 
       if (!conversationId) {

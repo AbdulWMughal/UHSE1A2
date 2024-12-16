@@ -29,27 +29,28 @@ export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState<any[]>([]);
 
-  const getSearchResults = async (text: string) => {
-    text = text.toLowerCase();
+  const getSearchResults = async (text: string) => { // Function to get search results from Firestore
+    text = text.toLowerCase(); // Normalize search query to lowercase
 
     const usersRef = collection(db, "users");
     const q = query(
       usersRef,
-      where("email", ">=", text),
+      where("email", ">=", text), // Query for emails starting with the search text
       where("email", "<=", text + "\uf8ff"),
       where("email", "!=", auth.currentUser?.email)
     );
-    const res = await getDocs(q);
+    const res = await getDocs(q); // Execute Firestore query to get matching documents
     if (res) {
       let users: any[] = [];
-      res.docs.forEach((doc) => users.push(doc.data()));
+      res.docs.forEach((doc) => users.push(doc.data())); // Add user data to the array
       return users;
     }
 
     return [];
   };
 
-  useEffect(() => {
+  // Effect hook to fetch users when the search query changes
+  useEffect(() => { 
     async function fetchUsers() {
       setUsers(await getSearchResults(searchQuery));
     }
@@ -57,8 +58,9 @@ export default function SearchScreen() {
     fetchUsers();
   }, [searchQuery]);
 
+  // Function to handle the submission of the search input
   const handleSubmit = async (text: string) => {
-    setUsers(await getSearchResults(text));
+    setUsers(await getSearchResults(text)); // Update users state with new search results
   };
 
   return (
