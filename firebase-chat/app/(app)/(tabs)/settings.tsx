@@ -1,31 +1,41 @@
-import { View } from "react-native";
-import { getAuth, signOut } from "firebase/auth";
-import { Button, Text } from "react-native-paper";
+import { View } from "react-native";  // Import View component from React Native for layout
+import { getAuth, signOut } from "firebase/auth";  // Import Firebase authentication functions for signing out
+import { Button, Text } from "react-native-paper";  // Import Button and Text components from React Native Paper for UI elements
 
 export default function SettingsScreen() {
-  const auth = getAuth();
+  const auth = getAuth();  // Get the Firebase authentication instance
 
+  // Function to handle user sign out
   const logoutUser = () => {
-    signOut(auth);
+    signOut(auth);  // Call Firebase's signOut method to log the user out
   };
 
   return (
     <View
       style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
+        flex: 1,  // Make the view take up the full screen
+        alignItems: "center",  // Center the content horizontally
+        justifyContent: "center",  // Center the content vertically
       }}
     >
+      {/* Display the title "Your Account" */}
       <Text
-        style={{ fontWeight: "bold", paddingBottom: 20 }}
-        variant="titleLarge"
+        style={{ fontWeight: "bold", paddingBottom: 20 }}  // Style the title with bold text and some padding
+        variant="titleLarge"  // Use a large text style variant
       >
         Your Account
       </Text>
-      <Text>{auth.currentUser?.email}</Text>
-      <Button mode="contained" style={{ marginTop: 20 }} onPress={logoutUser}>
-        Sign Out
+
+      {/* Display the current user's email */}
+      <Text>{auth.currentUser?.email}</Text>  // Dynamically display the logged-in user's email
+
+      {/* Button to sign out the user */}
+      <Button
+        mode="contained"  // The button has a filled appearance
+        style={{ marginTop: 20 }}  // Add margin at the top of the button for spacing
+        onPress={logoutUser}  // Call logoutUser function when the button is pressed
+      >
+        Sign Out  {/* Button label */}
       </Button>
     </View>
   );
